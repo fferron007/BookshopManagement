@@ -1,0 +1,25 @@
+﻿<Window x:Class="BookshopManagement.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Bookshop Management" Height="500" Width="800">
+
+    <Grid>
+        <!-- Menu for navigation -->
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="File">
+                    <MenuItem Header="Exit" Click="Exit_Click"/>
+                </MenuItem>
+                <MenuItem Header="Menu">
+                    <!-- Navigation menu item for Book Management -->
+                    <MenuItem Header="Book Management" Click="BookManagement_Click"/>
+                    <!-- New navigation menu item for Sales Page -->
+                    <MenuItem Header="Sales" Click="SalesPage_Click"/>
+                </MenuItem>
+            </Menu>
+
+            <!-- Frame to load pages -->
+            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />
+        </DockPanel>
+    </Grid>
+</Window>
