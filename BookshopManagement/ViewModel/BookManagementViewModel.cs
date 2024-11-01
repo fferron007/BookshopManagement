@@ -3,6 +3,7 @@ using BookshopManagement.Common;
 using BookshopManagement.DAL.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace BookshopManagement.PL.ViewModel
@@ -115,6 +116,11 @@ namespace BookshopManagement.PL.ViewModel
             var newBook = new Book { Title = Title, Author = Author, ISBN = ISBN, Price = Price, StockQuantity = StockQuantity };
             _bookService.AddBook(newBook);
             Books.Add(newBook);
+
+            // Show success message
+            MessageBox.Show("Book added successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            // Clear input fields
             ClearFields();
         }
 
@@ -122,6 +128,7 @@ namespace BookshopManagement.PL.ViewModel
         {
             if (SelectedBook == null) return;
 
+            // Update properties of the selected book
             SelectedBook.Title = Title;
             SelectedBook.Author = Author;
             SelectedBook.ISBN = ISBN;
@@ -129,7 +136,12 @@ namespace BookshopManagement.PL.ViewModel
             SelectedBook.StockQuantity = StockQuantity;
 
             _bookService.UpdateBook(SelectedBook);
-            Books[Books.IndexOf(SelectedBook)] = SelectedBook;
+
+            // Refresh the Books collection by re-fetching data from the service
+            RefreshBooksCollection();
+
+            // Show success message
+            MessageBox.Show("Book updated successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void DeleteBook()
@@ -138,7 +150,21 @@ namespace BookshopManagement.PL.ViewModel
 
             _bookService.DeleteBook(SelectedBook);
             Books.Remove(SelectedBook);
+
+            // Show success message
+            MessageBox.Show("Book deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            // Clear input fields after deletion
             ClearFields();
+        }
+
+        private void RefreshBooksCollection()
+        {
+            Books.Clear();
+            foreach (var book in _bookService.GetAllBooks())
+            {
+                Books.Add(book);
+            }
         }
 
         private void LoadBookDetails(Book book)
@@ -155,8 +181,7 @@ namespace BookshopManagement.PL.ViewModel
         private void ClearFields()
         {
             Title = Author = ISBN = string.Empty;
-            Price = 0;
-            StockQuantity = 0;
+            Price = StockQuantity = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

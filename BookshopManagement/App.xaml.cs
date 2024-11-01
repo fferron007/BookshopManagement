@@ -41,6 +41,7 @@ namespace BookshopManagement
             // Register ViewModels
             serviceCollection.AddSingleton<BookManagementViewModel>();
             serviceCollection.AddSingleton<SalesViewModel>();
+            serviceCollection.AddSingleton<SalesReportViewModel>();
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
 

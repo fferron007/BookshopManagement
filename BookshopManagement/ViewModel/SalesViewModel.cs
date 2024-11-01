@@ -62,7 +62,7 @@ namespace BookshopManagement.PL.ViewModel
             _bookService = bookService;
             _salesService = salesService;
 
-            AvailableBooks = new ObservableCollection<Book>(_bookService.GetAllBooks());
+            AvailableBooks = new ObservableCollection<Book>(_bookService.GetAllBooks().Where(b => b.StockQuantity > 0));
             Cart = new ObservableCollection<CartItem>();
 
             // Subscribe to CollectionChanged to update CanSell state

@@ -22,6 +22,11 @@ namespace BookshopManagement
             MainFrame.Navigate(new SalesPage());
         }
 
+        private void SalesReport_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new SalesReportPage());
+        }
+
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             // Close the application

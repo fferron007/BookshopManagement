@@ -2,6 +2,7 @@
 using BookshopManagement.BL.Interface;
 using BookshopManagement.DAL.Data;
 using BookshopManagement.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookshopManagement.BL.Services
 {
@@ -40,6 +41,14 @@ namespace BookshopManagement.BL.Services
 
             // Return the count of items processed as a confirmation (or transaction count)
             return cartItems.Count();
+        }
+
+        public IEnumerable<Sale> GetSalesByDate(DateTime date)
+        {
+            return _context.Sales
+                .Where(sale => sale.SaleDate.Date == date.Date)
+                .Include(sale => sale.Book)
+                .ToList();
         }
 
     }

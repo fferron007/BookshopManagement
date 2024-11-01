@@ -8,6 +8,5 @@ namespace BookshopManagement.BL.Interface
         void AddBook(Book book);
         void UpdateBook(Book book);
         void DeleteBook(Book book);
-        //Task SellBookAsync(int bookId, int quantity)
     }
 }
