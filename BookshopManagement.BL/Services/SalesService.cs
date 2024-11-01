@@ -1,4 +1,5 @@
-﻿using BookshopManagement.BL.Interface;
+﻿using BookshopManagement.BL.DTO;
+using BookshopManagement.BL.Interface;
 using BookshopManagement.DAL.Data;
 using BookshopManagement.DAL.Models;
 
@@ -13,18 +14,33 @@ namespace BookshopManagement.BL.Services
             _context = context;
         }
 
-        public void AddSale(Book book, int quantity)
+        public int AddSales(IEnumerable<CartItemDTO> cartItems)
         {
-            var sale = new Sale
+            foreach (var item in cartItems)
             {
-                BookId = book.Id,
-                Quantity = quantity,
-                SaleDate = DateTime.Now
-            };
+                // Create a new Sale record
+                var sale = new Sale
+                {
+                    BookId = item.BookId,         
+                    Quantity = item.Quantity,
+                    SaleDate = DateTime.Now,
+                    TotalPrice = item.TotalPrice
+                };
+                _context.Sales.Add(sale);
 
-            book.StockQuantity -= quantity;
-            _context.Sales.Add(sale);
+                // Update the stock of the book in the database
+                var book = _context.Books.FirstOrDefault(b => b.Id == item.BookId);
+                if (book != null)
+                {
+                    book.StockQuantity -= item.Quantity;
+                }
+            }
+
             _context.SaveChanges();
+
+            // Return the count of items processed as a confirmation (or transaction count)
+            return cartItems.Count();
         }
+
     }
 }

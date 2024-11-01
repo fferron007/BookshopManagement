@@ -1,9 +1,9 @@
-﻿using BookshopManagement.DAL.Models;
+﻿using BookshopManagement.BL.DTO;
 
 namespace BookshopManagement.BL.Interface
 {
     public interface ISalesService
     {
-        void AddSale(Book book, int quantity);
+        int AddSales(IEnumerable<CartItemDTO> cartItems);
     }
 }

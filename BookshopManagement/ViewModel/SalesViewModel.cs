@@ -1,4 +1,5 @@
-﻿using BookshopManagement.BL.Interface;
+﻿using BookshopManagement.BL.DTO;
+using BookshopManagement.BL.Interface;
 using BookshopManagement.Common;
 using BookshopManagement.DAL.Models;
 using System.Collections.ObjectModel;
@@ -64,6 +65,9 @@ namespace BookshopManagement.PL.ViewModel
             AvailableBooks = new ObservableCollection<Book>(_bookService.GetAllBooks());
             Cart = new ObservableCollection<CartItem>();
 
+            // Subscribe to CollectionChanged to update CanSell state
+            Cart.CollectionChanged += (s, e) => ((RelayCommand)SellCommand).RaiseCanExecuteChanged();
+
             AddToCartCommand = new RelayCommand(AddToCart, CanAddToCart);
             SellCommand = new RelayCommand(Sell, CanSell);
             RemoveFromCartCommand = new RelayCommand(RemoveFromCart, CanRemoveFromCart);
@@ -73,12 +77,11 @@ namespace BookshopManagement.PL.ViewModel
 
         private void AddToCart()
         {
-            if (SelectedBook != null)
+            if (SelectedBook != null && Quantity > 0)
             {
                 // Check if the requested quantity exceeds available stock
                 if (Quantity > SelectedBook.StockQuantity)
                 {
-                    // Display a message to the user (for example, using MessageBox or a toast notification)
                     MessageBox.Show("Insufficient stock. Please reduce the quantity.", "Stock Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return; // Exit the method to prevent adding to the cart
                 } 
@@ -111,6 +114,10 @@ namespace BookshopManagement.PL.ViewModel
 
                 // Refresh the AvailableBooks collection to update the Stock Quantity in the UI
                 RefreshAvailableBooks();
+            }
+            else
+            {
+                MessageBox.Show("Enter a quantity greater than zero.", "Cart Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -155,14 +162,28 @@ namespace BookshopManagement.PL.ViewModel
 
         private void Sell()
         {
-            foreach (var cartItem in Cart)
+            if (Cart.Any())
             {
-                _salesService.AddSale(cartItem.Book, cartItem.Quantity);
-            }
+                // Map each CartItem to CartItemDTO for the service layer
+                var cartItemsDto = Cart.Select(item => new CartItemDTO
+                {
+                    BookId = item.Book.Id,
+                    Quantity = item.Quantity,
+                    TotalPrice = item.TotalPrice
+                }).ToList();
 
-            Cart.Clear();
-            AvailableBooks = new ObservableCollection<Book>(_bookService.GetAllBooks()); // Refresh available books
+                // Save the sales using the service and get the sales count
+                int salesCount = _salesService.AddSales(cartItemsDto);
+
+                // Show success message
+                MessageBox.Show($"{salesCount} item(s) have been successfully ordered.", "Sales Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Clear the cart and refresh the available books
+                Cart.Clear();
+                RefreshAvailableBooks();
+            }
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
