@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BookshopContextFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="..\BookshopManagement\appsettings.json" Link="appsettings.json" />
   </ItemGroup>
 

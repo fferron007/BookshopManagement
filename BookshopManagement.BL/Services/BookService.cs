@@ -21,6 +21,4 @@ namespace BookshopManagement.BL.Services
 
         public void DeleteBook(Book book) => _bookRepository.Delete(book);
     }
-
-
 }

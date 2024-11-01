@@ -4,11 +4,14 @@ namespace BookshopManagement.Common
 {
     public class RelayCommand : ICommand
     {
+        #region Properties
         private readonly Action _execute;
         private readonly Func<bool> _canExecute;
 
         public event EventHandler CanExecuteChanged;
+        #endregion
 
+        #region Public Methods
         public RelayCommand(Action execute, Func<bool> canExecute = null)
         {
             _execute = execute;
@@ -29,6 +32,7 @@ namespace BookshopManagement.Common
         {
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
+        #endregion
     }
 
 }

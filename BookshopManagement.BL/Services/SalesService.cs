@@ -50,6 +50,5 @@ namespace BookshopManagement.BL.Services
                 .Include(sale => sale.Book)
                 .ToList();
         }
-
     }
 }
