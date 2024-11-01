@@ -32,6 +32,9 @@ namespace BookshopManagement
             serviceCollection.AddDbContext<BookshopContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("BookshopDatabase")));
 
+            // Register IConfiguration
+            serviceCollection.AddSingleton<IConfiguration>(configuration);
+
             // Register Core services
             serviceCollection.AddScoped<IBookRepository, BookRepository>();
             serviceCollection.AddScoped<IBookService, BookService>();

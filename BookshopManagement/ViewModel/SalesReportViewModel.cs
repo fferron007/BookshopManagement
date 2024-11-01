@@ -2,6 +2,7 @@
 using BookshopManagement.BL.Services;
 using BookshopManagement.Common;
 using BookshopManagement.DAL.Models;
+using Microsoft.Extensions.Configuration;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -16,7 +17,8 @@ namespace BookshopManagement.PL.ViewModel
         private DateTime? _endDate;
         public ObservableCollection<Sale> SalesReport { get; set; }
         private readonly ISalesService _salesService;
-        private readonly string _reportDirectoryPath = @"C:\temp\BookshopManagement\SalesReport";
+        private readonly IConfiguration _configuration;
+        private readonly string _reportDirectoryPath;
 
 
         public DateTime? StartDate
@@ -42,13 +44,17 @@ namespace BookshopManagement.PL.ViewModel
         public ICommand GenerateReportCommand { get; }
         public ICommand ExportToCsvCommand { get; }
 
-        public SalesReportViewModel(ISalesService salesService)
+        public SalesReportViewModel(ISalesService salesService, IConfiguration configuration)
         {
             _salesService = salesService;
-            
+            _configuration = configuration;
+
             SalesReport = new ObservableCollection<Sale>();
             GenerateReportCommand = new RelayCommand(GenerateReport);
             ExportToCsvCommand = new RelayCommand(ExportToCsv, CanExportToCsv);
+
+            // Retrieve the directory path from configuration
+            _reportDirectoryPath = _configuration["ReportSettings:ReportDirectoryPath"];
 
             EnsureReportDirectoryExists();
         }
