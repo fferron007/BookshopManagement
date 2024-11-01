@@ -69,7 +69,7 @@
         <TextBlock Grid.Row="2" Text="Cart" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
         <DataGrid Grid.Row="2" ItemsSource="{Binding Cart}" 
           SelectedItem="{Binding SelectedCartItem, Mode=TwoWay}"
-          AutoGenerateColumns="False" Margin="0,30,0,20" CanUserAddRows="False" SelectionMode="Single">
+          AutoGenerateColumns="False" Margin="0,30,0,20" CanUserAddRows="False" SelectionMode="Single" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Title" Binding="{Binding Book.Title}" Width="*"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*"/>
@@ -88,6 +88,34 @@
         </DataGrid>
 
         <!-- Sell Button -->
-        <Button Grid.Row="3" Content="Sell" Command="{Binding SellCommand}" HorizontalAlignment="Center" Width="100" Height="40" Margin="0,20,0,0"/>
+        <Button Grid.Row="3" Content="Sell" Command="{Binding SellCommand}" HorizontalAlignment="Center" Width="100" Height="40" Margin="0,20,0,0">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="#4CAF50"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Padding" Value="10,5"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#45A049"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Background" Value="#388E3C"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 </Page>

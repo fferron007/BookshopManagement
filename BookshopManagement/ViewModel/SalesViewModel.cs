@@ -108,8 +108,24 @@ namespace BookshopManagement.PL.ViewModel
 
                 // Clear the quantity input after adding to the cart
                 Quantity = 0;
+
+                // Refresh the AvailableBooks collection to update the Stock Quantity in the UI
+                RefreshAvailableBooks();
             }
         }
+
+        private void RefreshAvailableBooks()
+        {
+            var books = _bookService.GetAllBooks();
+
+            AvailableBooks.Clear();
+
+            foreach (var book in books)
+            {
+                AvailableBooks.Add(book);
+            }
+        }
+
 
         private bool CanRemoveFromCart() => SelectedCartItem != null;
 
@@ -117,8 +133,21 @@ namespace BookshopManagement.PL.ViewModel
         {
             if (SelectedCartItem != null)
             {
+                // Find the corresponding book in AvailableBooks
+                var bookToUpdate = AvailableBooks.FirstOrDefault(b => b.Id == SelectedCartItem.Book.Id);
+
+                if (bookToUpdate != null)
+                {
+                    // Recalculate stock by adding the quantity back
+                    bookToUpdate.StockQuantity += SelectedCartItem.Quantity;
+                }
+
+                // Remove the item from the cart
                 Cart.Remove(SelectedCartItem);
                 SelectedCartItem = null;
+
+                // Refresh AvailableBooks collection to update the UI
+                RefreshAvailableBooks();
             }
         }
 
