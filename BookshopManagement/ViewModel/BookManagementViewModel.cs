@@ -1,6 +1,8 @@
 ﻿using BookshopManagement.BL.Interface;
 using BookshopManagement.Common;
+using BookshopManagement.Common.Logger;
 using BookshopManagement.DAL.Models;
+using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -119,49 +121,73 @@ namespace BookshopManagement.PL.ViewModel
         #region Private Methods
         private void AddBook()
         {
-            var newBook = new Book { Title = Title, Author = Author, ISBN = ISBN, Price = Price, StockQuantity = StockQuantity };
-            _bookService.AddBook(newBook);
-            Books.Add(newBook);
+            try
+            {
+                var newBook = new Book { Title = Title, Author = Author, ISBN = ISBN, Price = Price, StockQuantity = StockQuantity };
+                _bookService.AddBook(newBook);
+                Books.Add(newBook);
 
-            // Show success message
-            MessageBox.Show("Book added successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                // Show success message
+                MessageBox.Show("Book added successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            // Clear input fields
-            ClearFields();
+                // Clear input fields
+                ClearFields();
+            }
+            catch (Exception ex)
+            {
+                LoggingService.Logger.LogError(ex, "Error adding book.");
+                throw ex;
+            }
         }
 
         private void EditBook()
         {
-            if (SelectedBook == null) return;
+            try
+            {
+                if (SelectedBook == null) return;
 
-            // Update properties of the selected book
-            SelectedBook.Title = Title;
-            SelectedBook.Author = Author;
-            SelectedBook.ISBN = ISBN;
-            SelectedBook.Price = Price;
-            SelectedBook.StockQuantity = StockQuantity;
+                // Update properties of the selected book
+                SelectedBook.Title = Title;
+                SelectedBook.Author = Author;
+                SelectedBook.ISBN = ISBN;
+                SelectedBook.Price = Price;
+                SelectedBook.StockQuantity = StockQuantity;
 
-            _bookService.UpdateBook(SelectedBook);
+                _bookService.UpdateBook(SelectedBook);
 
-            // Refresh the Books collection by re-fetching data from the service
-            RefreshBooksCollection();
+                // Refresh the Books collection by re-fetching data from the service
+                RefreshBooksCollection();
 
-            // Show success message
-            MessageBox.Show("Book updated successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                // Show success message
+                MessageBox.Show("Book updated successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                LoggingService.Logger.LogError(ex, "Error editing book.");
+                throw ex;
+            }
         }
 
         private void DeleteBook()
         {
-            if (SelectedBook == null) return;
+            try
+            {
+                if (SelectedBook == null) return;
 
-            _bookService.DeleteBook(SelectedBook);
-            Books.Remove(SelectedBook);
+                _bookService.DeleteBook(SelectedBook);
+                Books.Remove(SelectedBook);
 
-            // Show success message
-            MessageBox.Show("Book deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                // Show success message
+                MessageBox.Show("Book deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            // Clear input fields after deletion
-            ClearFields();
+                // Clear input fields after deletion
+                ClearFields();
+            }
+            catch (Exception ex)
+            {
+                LoggingService.Logger.LogError(ex, "Error deliting book.");
+                throw ex;
+            }
         }
 
         private void RefreshBooksCollection()

@@ -1,7 +1,9 @@
 ﻿using BookshopManagement.BL.DTO;
 using BookshopManagement.BL.Interface;
 using BookshopManagement.Common;
+using BookshopManagement.Common.Logger;
 using BookshopManagement.DAL.Models;
+using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -88,47 +90,55 @@ namespace BookshopManagement.PL.ViewModel
 
         private void AddToCart()
         {
-            if (SelectedBook != null && Quantity > 0)
+            try
             {
-                // Check if the requested quantity exceeds available stock
-                if (Quantity > SelectedBook.StockQuantity)
+                if (SelectedBook != null && Quantity > 0)
                 {
-                    MessageBox.Show("Insufficient stock. Please reduce the quantity.", "Stock Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return; // Exit the method to prevent adding to the cart
-                }
+                    // Check if the requested quantity exceeds available stock
+                    if (Quantity > SelectedBook.StockQuantity)
+                    {
+                        MessageBox.Show("Insufficient stock. Please reduce the quantity.", "Stock Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return; // Exit the method to prevent adding to the cart
+                    }
 
-                // Proceed with adding to cart if stock is sufficient
-                var existingItem = Cart.FirstOrDefault(item => item.Book.Id == SelectedBook.Id);
+                    // Proceed with adding to cart if stock is sufficient
+                    var existingItem = Cart.FirstOrDefault(item => item.Book.Id == SelectedBook.Id);
 
-                if (existingItem != null)
-                {
-                    // Update quantity and total price for the existing item
-                    existingItem.Quantity += Quantity;
-                    existingItem.TotalPrice = existingItem.Quantity * SelectedBook.Price;
+                    if (existingItem != null)
+                    {
+                        // Update quantity and total price for the existing item
+                        existingItem.Quantity += Quantity;
+                        existingItem.TotalPrice = existingItem.Quantity * SelectedBook.Price;
+                    }
+                    else
+                    {
+                        // Add a new item to the cart
+                        Cart.Add(new CartItem
+                        {
+                            Book = SelectedBook,
+                            Quantity = Quantity,
+                            TotalPrice = Quantity * SelectedBook.Price
+                        });
+                    }
+
+                    // Reduce the available stock quantity
+                    SelectedBook.StockQuantity -= Quantity;
+
+                    // Clear the quantity input after adding to the cart
+                    Quantity = 0;
+
+                    // Refresh the AvailableBooks collection to update the Stock Quantity in the UI
+                    RefreshAvailableBooks();
                 }
                 else
                 {
-                    // Add a new item to the cart
-                    Cart.Add(new CartItem
-                    {
-                        Book = SelectedBook,
-                        Quantity = Quantity,
-                        TotalPrice = Quantity * SelectedBook.Price
-                    });
+                    MessageBox.Show("Enter a quantity greater than zero.", "Cart Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
-
-                // Reduce the available stock quantity
-                SelectedBook.StockQuantity -= Quantity;
-
-                // Clear the quantity input after adding to the cart
-                Quantity = 0;
-
-                // Refresh the AvailableBooks collection to update the Stock Quantity in the UI
-                RefreshAvailableBooks();
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Enter a quantity greater than zero.", "Cart Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoggingService.Logger.LogError(ex, "Error adding book to cart.");
+                throw ex;
             }
         }
 

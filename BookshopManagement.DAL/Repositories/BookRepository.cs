@@ -3,6 +3,7 @@ using BookshopManagement.DAL.Interfaces;
 using BookshopManagement.DAL.Models;
 using BookshopManagement.Common.Logger;
 using Microsoft.Extensions.Logging;
+using Microsoft.Data.SqlClient;
 
 namespace BookshopManagement.DAL.Repositories
 {
@@ -26,7 +27,7 @@ namespace BookshopManagement.DAL.Repositories
 
                 LoggingService.Logger.LogInformation($"Book ID: {book.Id} added successfully.");
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
                 LoggingService.Logger.LogError(ex, "Error adding book to the database.");
                 throw ex;
@@ -50,7 +51,7 @@ namespace BookshopManagement.DAL.Repositories
                     LoggingService.Logger.LogInformation($"Book ID: {existing.Id} updated successfully.");
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
                 LoggingService.Logger.LogError(ex, "Error updating book to the database.");
                 throw ex;
@@ -70,7 +71,7 @@ namespace BookshopManagement.DAL.Repositories
                     LoggingService.Logger.LogInformation($"Book ID: {existing.Id} deleted successfully.");
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
                 LoggingService.Logger.LogError(ex, "Error deleting book to the database.");
                 throw ex;

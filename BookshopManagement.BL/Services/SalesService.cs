@@ -43,11 +43,11 @@ namespace BookshopManagement.BL.Services
             return cartItems.Count();
         }
 
-        public IEnumerable<Sale> GetSalesByDate(DateTime date)
+        public IEnumerable<Sale> GetSalesByDateRange(DateTime startDate, DateTime endDate)
         {
             return _context.Sales
-                .Where(sale => sale.SaleDate.Date == date.Date)
-                .Include(sale => sale.Book)
+                .Where(sale => sale.SaleDate >= startDate && sale.SaleDate <= endDate)
+                .Include(sale => sale.Book) 
                 .ToList();
         }
     }

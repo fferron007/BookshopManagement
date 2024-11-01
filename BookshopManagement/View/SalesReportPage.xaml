@@ -15,12 +15,17 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Date Selector -->
+        <!-- Date Range Selector -->
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
-            <TextBlock Text="Select Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <DatePicker SelectedDate="{Binding SelectedDate, Mode=TwoWay}" Width="150"/>
+            <TextBlock Text="Start Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay, StringFormat=yyyy-MM-dd}" Width="150" />
+
+            <TextBlock Text="End Date:" VerticalAlignment="Center" Margin="10,0,10,0"/>
+            <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay, StringFormat=yyyy-MM-dd}" Width="150" />
+
             <Button Content="Generate Report" Command="{Binding GenerateReportCommand}" Width="120" Margin="10,0,0,0"/>
         </StackPanel>
+
 
         <!-- Sales Data Grid -->
         <DataGrid Grid.Row="1" ItemsSource="{Binding SalesReport}" AutoGenerateColumns="False" CanUserAddRows="False">

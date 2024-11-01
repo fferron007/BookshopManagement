@@ -2,6 +2,7 @@
 using BookshopManagement.DAL.Data;
 using BookshopManagement.DAL.Interfaces;
 using BookshopManagement.DAL.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -25,7 +26,7 @@ namespace BookshopManagement.DAL.Repositories
 
                 LoggingService.Logger.LogInformation($"Sale #ID:{sale.Id} successfully.");
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
                 LoggingService.Logger.LogError("Error adding sale to the database.");
                 throw ex;

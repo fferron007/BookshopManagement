@@ -1,4 +1,5 @@
 ﻿using BookshopManagement.BL.Interface;
+using BookshopManagement.BL.Services;
 using BookshopManagement.Common;
 using BookshopManagement.DAL.Models;
 using System.Collections.ObjectModel;
@@ -11,54 +12,83 @@ namespace BookshopManagement.PL.ViewModel
 {
     public class SalesReportViewModel : INotifyPropertyChanged
     {
-        #region Properties
+        private DateTime? _startDate;
+        private DateTime? _endDate;
+        public ObservableCollection<Sale> SalesReport { get; set; }
         private readonly ISalesService _salesService;
-        public ObservableCollection<Sale> SalesReport { get; set; } = new ObservableCollection<Sale>();
+        private readonly string _reportDirectoryPath = @"C:\temp\BookshopManagement\SalesReport";
 
-        private DateTime? _selectedDate;
-        public DateTime? SelectedDate
+
+        public DateTime? StartDate
         {
-            get => _selectedDate;
+            get => _startDate;
             set
             {
-                _selectedDate = value;
-                OnPropertyChanged(nameof(SelectedDate));
+                _startDate = value;
+                OnPropertyChanged(nameof(StartDate));
+            }
+        }
+
+        public DateTime? EndDate
+        {
+            get => _endDate;
+            set
+            {
+                _endDate = value;
+                OnPropertyChanged(nameof(EndDate));
             }
         }
 
         public ICommand GenerateReportCommand { get; }
         public ICommand ExportToCsvCommand { get; }
-        #endregion
 
-        #region Public Methods
         public SalesReportViewModel(ISalesService salesService)
         {
             _salesService = salesService;
-
+            
+            SalesReport = new ObservableCollection<Sale>();
             GenerateReportCommand = new RelayCommand(GenerateReport);
             ExportToCsvCommand = new RelayCommand(ExportToCsv, CanExportToCsv);
+
+            EnsureReportDirectoryExists();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        #endregion
+        private void EnsureReportDirectoryExists()
+        {
+            // Check if directory exists and create if not
+            if (!Directory.Exists(_reportDirectoryPath))
+            {
+                Directory.CreateDirectory(_reportDirectoryPath);
+            }
+        }
 
-        #region Private Methods
         private void GenerateReport()
         {
-            if (SelectedDate == null)
+            if (StartDate == null || EndDate == null)
             {
-                MessageBox.Show("Please select a date.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please, enter a valid date range.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            // Clear current report and load sales data for the selected date
+            DateTime start = StartDate.Value.Date;
+            DateTime end = EndDate.Value.Date.AddDays(1).AddTicks(-1);
+
             SalesReport.Clear();
-            var sales = _salesService.GetSalesByDate(SelectedDate.Value);
-            foreach (var sale in sales)
+            var reportData = GetSalesDataForDateRange(start, end);
+
+            if (reportData.Count() > 0)
             {
-                SalesReport.Add(sale);
+                foreach (var sale in reportData)
+                {
+                    SalesReport.Add(sale);
+                }
+
+                // Notify that CanExecute should be re-evaluated
+                ((RelayCommand)ExportToCsvCommand).RaiseCanExecuteChanged();
+            }
+            else
+            {
+                MessageBox.Show("There is no sales in this period.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -70,11 +100,19 @@ namespace BookshopManagement.PL.ViewModel
                 $"{sale.Book.Title},{sale.Quantity},{sale.TotalPrice},{sale.SaleDate}");
 
             var csvContent = "Book Title,Quantity Sold,Total Price,Sale Date\n" + string.Join("\n", csvLines);
-            var filePath = $"SalesReport_{SelectedDate:yyyy-MM-dd}.csv";
+            var filePath = Path.Combine(_reportDirectoryPath, $"SalesReport_{DateTime.Now:yyyy-MM-dd}.csv");
 
             File.WriteAllText(filePath, csvContent);
             MessageBox.Show($"Sales report exported to {filePath}", "Export Successful", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-        #endregion
+
+        private IEnumerable<Sale> GetSalesDataForDateRange(DateTime startDate, DateTime endDate)
+        {
+            return _salesService.GetSalesByDateRange(startDate, endDate);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
