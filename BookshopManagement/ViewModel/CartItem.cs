@@ -5,6 +5,7 @@ namespace BookshopManagement.PL.ViewModel
 {
     public class CartItem : INotifyPropertyChanged
     {
+        #region Properties
         private int _quantity;
         public Book Book { get; set; }
         public int Quantity
@@ -31,10 +32,13 @@ namespace BookshopManagement.PL.ViewModel
                 }
             }
         }
+        #endregion
 
+        #region Public Methods
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion
     }
 
 }

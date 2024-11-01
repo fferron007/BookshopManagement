@@ -11,6 +11,8 @@ namespace BookshopManagement.PL.ViewModel
 {
     public class SalesViewModel : INotifyPropertyChanged
     {
+        #region Properties 
+
         private readonly IBookService _bookService;
         private readonly ISalesService _salesService;
 
@@ -57,6 +59,9 @@ namespace BookshopManagement.PL.ViewModel
         public ICommand SellCommand { get; }
         public ICommand RemoveFromCartCommand { get; }
 
+        #endregion
+
+        #region Public Methods
         public SalesViewModel(IBookService bookService, ISalesService salesService)
         {
             _bookService = bookService;
@@ -73,6 +78,12 @@ namespace BookshopManagement.PL.ViewModel
             RemoveFromCartCommand = new RelayCommand(RemoveFromCart, CanRemoveFromCart);
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion
+
+        #region Private Methods
         private bool CanAddToCart() => true;
 
         private void AddToCart()
@@ -84,7 +95,7 @@ namespace BookshopManagement.PL.ViewModel
                 {
                     MessageBox.Show("Insufficient stock. Please reduce the quantity.", "Stock Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return; // Exit the method to prevent adding to the cart
-                } 
+                }
 
                 // Proceed with adding to cart if stock is sufficient
                 var existingItem = Cart.FirstOrDefault(item => item.Book.Id == SelectedBook.Id);
@@ -183,10 +194,6 @@ namespace BookshopManagement.PL.ViewModel
                 RefreshAvailableBooks();
             }
         }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion
     }
 }

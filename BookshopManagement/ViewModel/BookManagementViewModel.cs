@@ -10,6 +10,7 @@ namespace BookshopManagement.PL.ViewModel
 {
     public class BookManagementViewModel : INotifyPropertyChanged
     {
+        #region Properties
         private readonly IBookService _bookService;
         public ObservableCollection<Book> Books { get; set; }
 
@@ -25,7 +26,6 @@ namespace BookshopManagement.PL.ViewModel
             }
         }
 
-        // Properties for binding to UI fields
         private string _title, _author, _isbn;
         private decimal _price;
         private int _stockQuantity;
@@ -95,12 +95,13 @@ namespace BookshopManagement.PL.ViewModel
             }
         }
 
-
         // Commands
         public ICommand AddBookCommand { get; }
         public ICommand EditBookCommand { get; }
         public ICommand DeleteBookCommand { get; }
+        #endregion
 
+        #region Public Methods
         public BookManagementViewModel(IBookService bookService)
         {
             _bookService = bookService;
@@ -111,6 +112,11 @@ namespace BookshopManagement.PL.ViewModel
             DeleteBookCommand = new RelayCommand(DeleteBook);
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion
+
+        #region Private Methods
         private void AddBook()
         {
             var newBook = new Book { Title = Title, Author = Author, ISBN = ISBN, Price = Price, StockQuantity = StockQuantity };
@@ -183,8 +189,6 @@ namespace BookshopManagement.PL.ViewModel
             Title = Author = ISBN = string.Empty;
             Price = StockQuantity = 0;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion
     }
 }

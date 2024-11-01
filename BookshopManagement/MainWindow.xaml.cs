@@ -1,4 +1,6 @@
-﻿using BookshopManagement.PL.View;
+﻿using BookshopManagement.Common.Logger;
+using BookshopManagement.PL.View;
+using Microsoft.Extensions.Logging;
 using System.Windows;
 
 namespace BookshopManagement
@@ -8,6 +10,8 @@ namespace BookshopManagement
         public MainWindow()
         {
             InitializeComponent();
+
+            LoggingService.Logger.LogInformation("System initialized successfully.");
         }
 
         private void BookManagement_Click(object sender, RoutedEventArgs e)
@@ -29,6 +33,8 @@ namespace BookshopManagement
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            LoggingService.Logger.LogInformation("Closing system.");
+
             // Close the application
             Application.Current.Shutdown();
         }

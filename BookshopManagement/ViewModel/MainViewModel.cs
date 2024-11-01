@@ -28,21 +28,6 @@ namespace BookshopManagement.PL.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // Example of property with change notification
-        private string _exampleProperty;
-        public string ExampleProperty
-        {
-            get => _exampleProperty;
-            set
-            {
-                if (_exampleProperty != value)
-                {
-                    _exampleProperty = value;
-                    OnPropertyChanged(); // Notifies the UI of the change
-                }
-            }
-        }
-
         private async Task AddBook() { /* Logic for adding a book */ }
         private async Task SellBook() { /* Logic for selling a book */ }
     }

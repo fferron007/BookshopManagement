@@ -3,22 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookshopManagement.PL", "..\BookshopManagement\BookshopManagement\BookshopManagement.PL.csproj", "{B5DA19CF-3513-44E9-9FE6-CF50880BDB45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookshopManagement.PL", "BookshopManagement\BookshopManagement.PL.csproj", "{B5DA19CF-3513-44E9-9FE6-CF50880BDB45}"
 	ProjectSection(ProjectDependencies) = postProject
 		{34129903-2489-400B-83B6-2BE2447B9A34} = {34129903-2489-400B-83B6-2BE2447B9A34}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookshopManagement.DAL", "..\BookshopManagement\BookshopManagement.DAL\BookshopManagement.DAL.csproj", "{3075D2EC-C3F0-4372-8C12-F5BB7E189623}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookshopManagement.DAL", "BookshopManagement.DAL\BookshopManagement.DAL.csproj", "{3075D2EC-C3F0-4372-8C12-F5BB7E189623}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B2054D5C-7663-4169-AD6D-658011285511} = {B2054D5C-7663-4169-AD6D-658011285511}
+	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookshopManagement.BL", "..\BookshopManagement\BookshopManagement.BL\BookshopManagement.BL.csproj", "{34129903-2489-400B-83B6-2BE2447B9A34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookshopManagement.BL", "BookshopManagement.BL\BookshopManagement.BL.csproj", "{34129903-2489-400B-83B6-2BE2447B9A34}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3075D2EC-C3F0-4372-8C12-F5BB7E189623} = {3075D2EC-C3F0-4372-8C12-F5BB7E189623}
 		{B2054D5C-7663-4169-AD6D-658011285511} = {B2054D5C-7663-4169-AD6D-658011285511}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookshopManagement.Common", "..\BookshopManagement\BookshopManagement.Common\BookshopManagement.Common.csproj", "{B2054D5C-7663-4169-AD6D-658011285511}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookshopManagement.Common", "BookshopManagement.Common\BookshopManagement.Common.csproj", "{B2054D5C-7663-4169-AD6D-658011285511}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookshopManagement.Tests", "..\BookshopManagement\BookshopManagement.Tests\BookshopManagement.Tests.csproj", "{ED81DF72-A374-4DAD-B053-36F3862CB83E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookshopManagement.Tests", "BookshopManagement.Tests\BookshopManagement.Tests.csproj", "{ED81DF72-A374-4DAD-B053-36F3862CB83E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3075D2EC-C3F0-4372-8C12-F5BB7E189623} = {3075D2EC-C3F0-4372-8C12-F5BB7E189623}
 		{34129903-2489-400B-83B6-2BE2447B9A34} = {34129903-2489-400B-83B6-2BE2447B9A34}

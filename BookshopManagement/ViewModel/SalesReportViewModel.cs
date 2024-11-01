@@ -11,8 +11,8 @@ namespace BookshopManagement.PL.ViewModel
 {
     public class SalesReportViewModel : INotifyPropertyChanged
     {
+        #region Properties
         private readonly ISalesService _salesService;
-
         public ObservableCollection<Sale> SalesReport { get; set; } = new ObservableCollection<Sale>();
 
         private DateTime? _selectedDate;
@@ -28,7 +28,9 @@ namespace BookshopManagement.PL.ViewModel
 
         public ICommand GenerateReportCommand { get; }
         public ICommand ExportToCsvCommand { get; }
+        #endregion
 
+        #region Public Methods
         public SalesReportViewModel(ISalesService salesService)
         {
             _salesService = salesService;
@@ -37,6 +39,12 @@ namespace BookshopManagement.PL.ViewModel
             ExportToCsvCommand = new RelayCommand(ExportToCsv, CanExportToCsv);
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion
+
+        #region Private Methods
         private void GenerateReport()
         {
             if (SelectedDate == null)
@@ -67,9 +75,6 @@ namespace BookshopManagement.PL.ViewModel
             File.WriteAllText(filePath, csvContent);
             MessageBox.Show($"Sales report exported to {filePath}", "Export Successful", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion
     }
 }

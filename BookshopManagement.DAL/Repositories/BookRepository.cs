@@ -1,6 +1,8 @@
 ﻿using BookshopManagement.DAL.Data;
 using BookshopManagement.DAL.Interfaces;
 using BookshopManagement.DAL.Models;
+using BookshopManagement.Common.Logger;
+using Microsoft.Extensions.Logging;
 
 namespace BookshopManagement.DAL.Repositories
 {
@@ -17,31 +19,61 @@ namespace BookshopManagement.DAL.Repositories
 
         public void Add(Book book)
         {
-            _context.Books.Add(book);
-            _context.SaveChanges();
+            try
+            {
+                _context.Books.Add(book);
+                _context.SaveChanges();
+
+                LoggingService.Logger.LogInformation($"Book ID: {book.Id} added successfully.");
+            }
+            catch (Exception ex)
+            {
+                LoggingService.Logger.LogError(ex, "Error adding book to the database.");
+                throw ex;
+            }
         }
 
         public void Update(Book book)
         {
-            var existing = _context.Books.Find(book.Id);
-            if (existing != null)
+            try
             {
-                existing.Title = book.Title;
-                existing.Author = book.Author;
-                existing.ISBN = book.ISBN;
-                existing.Price = book.Price;
-                existing.StockQuantity = book.StockQuantity;
-                _context.SaveChanges();
+                var existing = _context.Books.Find(book.Id);
+                if (existing != null)
+                {
+                    existing.Title = book.Title;
+                    existing.Author = book.Author;
+                    existing.ISBN = book.ISBN;
+                    existing.Price = book.Price;
+                    existing.StockQuantity = book.StockQuantity;
+                    _context.SaveChanges();
+
+                    LoggingService.Logger.LogInformation($"Book ID: {existing.Id} updated successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggingService.Logger.LogError(ex, "Error updating book to the database.");
+                throw ex;
             }
         }
 
         public void Delete(Book book)
         {
-            var existing = _context.Books.Find(book.Id);
-            if (existing != null)
+            try
             {
-                _context.Books.Remove(existing);
-                _context.SaveChanges();
+                var existing = _context.Books.Find(book.Id);
+                if (existing != null)
+                {
+                    _context.Books.Remove(existing);
+                    _context.SaveChanges();
+
+                    LoggingService.Logger.LogInformation($"Book ID: {existing.Id} deleted successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggingService.Logger.LogError(ex, "Error deleting book to the database.");
+                throw ex;
             }
         }
     }

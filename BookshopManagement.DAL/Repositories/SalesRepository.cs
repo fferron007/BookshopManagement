@@ -1,7 +1,9 @@
-﻿using BookshopManagement.DAL.Data;
+﻿using BookshopManagement.Common.Logger;
+using BookshopManagement.DAL.Data;
 using BookshopManagement.DAL.Interfaces;
 using BookshopManagement.DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace BookshopManagement.DAL.Repositories
 {
@@ -16,8 +18,18 @@ namespace BookshopManagement.DAL.Repositories
 
         public void AddSale(Sale sale)
         {
-            _context.Sales.Add(sale);
-            _context.SaveChanges();
+            try
+            {
+                _context.Sales.Add(sale);
+                _context.SaveChanges();
+
+                LoggingService.Logger.LogInformation($"Sale #ID:{sale.Id} successfully.");
+            }
+            catch (Exception ex)
+            {
+                LoggingService.Logger.LogError("Error adding sale to the database.");
+                throw ex;
+            }
         }
 
         public IEnumerable<Sale> GetAllSales()

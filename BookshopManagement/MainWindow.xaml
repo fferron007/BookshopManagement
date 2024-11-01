@@ -12,7 +12,7 @@
                 </MenuItem>
                 <MenuItem Header="Menu">
                     <!-- Navigation menu item for Book Management -->
-                    <MenuItem Header="Book Management" Click="BookManagement_Click"/>
+                    <MenuItem Header="Book" Click="BookManagement_Click"/>
                     <!-- New navigation menu item for Sales Page -->
                     <MenuItem Header="Sales" Click="SalesPage_Click"/>
                     <!-- New navigation menu item for Sales Report Page -->
