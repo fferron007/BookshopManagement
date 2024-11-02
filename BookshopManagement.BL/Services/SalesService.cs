@@ -28,13 +28,6 @@ namespace BookshopManagement.BL.Services
                     TotalPrice = item.TotalPrice
                 };
                 _context.Sales.Add(sale);
-
-                // Update the stock of the book in the database
-                var book = _context.Books.FirstOrDefault(b => b.Id == item.BookId);
-                if (book != null)
-                {
-                    book.StockQuantity -= item.Quantity;
-                }
             }
 
             _context.SaveChanges();

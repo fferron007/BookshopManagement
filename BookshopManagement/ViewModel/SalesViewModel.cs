@@ -144,7 +144,7 @@ namespace BookshopManagement.PL.ViewModel
 
         private void RefreshAvailableBooks()
         {
-            var books = _bookService.GetAllBooks();
+            var books = AvailableBooks.Where(b => b.StockQuantity > 0).ToList();
 
             AvailableBooks.Clear();
 
@@ -162,7 +162,7 @@ namespace BookshopManagement.PL.ViewModel
             if (SelectedCartItem != null)
             {
                 // Find the corresponding book in AvailableBooks
-                var bookToUpdate = AvailableBooks.FirstOrDefault(b => b.Id == SelectedCartItem.Book.Id);
+                var bookToUpdate = _bookService.GetAllBooks().FirstOrDefault(b => b.Id == SelectedCartItem.Book.Id);
 
                 if (bookToUpdate != null)
                 {
@@ -170,12 +170,21 @@ namespace BookshopManagement.PL.ViewModel
                     bookToUpdate.StockQuantity += SelectedCartItem.Quantity;
                 }
 
+                // Refresh AvailableBooks collection to update the UI
+                var existingBook = AvailableBooks.FirstOrDefault(b => b.Id == bookToUpdate.Id);
+
+                if (existingBook != null)
+                {
+                    RefreshAvailableBooks();
+                } else {
+                    AvailableBooks.Add(bookToUpdate);
+                }
+
                 // Remove the item from the cart
                 Cart.Remove(SelectedCartItem);
                 SelectedCartItem = null;
 
-                // Refresh AvailableBooks collection to update the UI
-                RefreshAvailableBooks();
+              
             }
         }
 
