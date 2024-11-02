@@ -15,24 +15,6 @@ This solution is a Bookshop Management application built with .NET Core using WP
    ```bash
    git clone https://github.com/yourusername/bookshop-management.git
    cd bookshop-management
-
-   # Bookshop Management Solution
-
-This solution is a Bookshop Management application built with .NET Core using WPF for the presentation layer, Entity Framework for data access, and NLog for logging. This README provides steps to set up and run the project on a new machine.
-
-## Prerequisites
-
-1. **.NET SDK**: Make sure .NET SDK is installed. You can download it from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download).
-2. **SQL Server**: Install SQL Server or use SQL Server Express if you don’t already have a SQL Server instance.
-3. **Visual Studio** (recommended): Ensure that Visual Studio with .NET desktop development is installed.
-
-## Step-by-Step Setup
-
-1. **Clone the Repository**
-
-   ```bash
-   git clone https://github.com/yourusername/bookshop-management.git
-   cd bookshop-management
    ```
 
 2. **Open the Solution in Visual Studio**
