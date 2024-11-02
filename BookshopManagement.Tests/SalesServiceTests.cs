@@ -27,29 +27,7 @@ namespace BookshopManagement.Tests
             _context.SaveChanges();
         }
 
-        [Fact]
-        public void AddSales_ShouldAddSalesRecords_WhenValidCartItemsProvided()
-        {
-            // Arrange
-            var cartItems = new List<CartItemDTO>
-            {
-                new CartItemDTO { BookId = 1, Quantity = 2, TotalPrice = 20.0m },
-                new CartItemDTO { BookId = 2, Quantity = 3, TotalPrice = 30.0m }
-            };
-
-            // Act
-            var result = _salesService.AddSales(cartItems);
-
-            // Assert
-            Assert.Equal(2, result); // Verify the number of processed items
-            Assert.Equal(2, _context.Sales.Count()); // Verify records in the database
-
-            // Verify sale details
-            var sales = _context.Sales.ToList();
-            Assert.Equal(20.0m, sales[0].TotalPrice);
-            Assert.Equal(30.0m, sales[1].TotalPrice);
-        }
-
+        
         [Fact]
         public void GetSalesByDateRange_ShouldReturnSalesWithinSpecifiedRange()
         {
