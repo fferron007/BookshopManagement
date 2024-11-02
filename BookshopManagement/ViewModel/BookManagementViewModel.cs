@@ -213,7 +213,8 @@ namespace BookshopManagement.PL.ViewModel
         private void ClearFields()
         {
             Title = Author = ISBN = string.Empty;
-            Price = StockQuantity = 0;
+            Price = 0.0m; 
+            StockQuantity = 0;
         }
         #endregion
     }
