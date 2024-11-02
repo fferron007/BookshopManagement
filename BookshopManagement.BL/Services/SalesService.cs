@@ -38,10 +38,24 @@ namespace BookshopManagement.BL.Services
 
         public IEnumerable<Sale> GetSalesByDateRange(DateTime startDate, DateTime endDate)
         {
-            return _context.Sales
+            // Retrieve all sales in the date range, including deleted books
+            var sales = _context.Sales
                 .Where(sale => sale.SaleDate >= startDate && sale.SaleDate <= endDate)
-                .Include(sale => sale.Book) 
+                .Include(sale => sale.Book) // Include book to access related data if available
+                .AsEnumerable() 
+                .Select(sale => new Sale
+                {
+                    Id = sale.Id,
+                    BookId = sale.BookId,
+                    Quantity = sale.Quantity,
+                    SaleDate = sale.SaleDate,
+                    TotalPrice = sale.TotalPrice,
+                    Book = sale.Book ?? new Book { Title = "Book no longer available" }
+                })
                 .ToList();
+
+            return sales;
         }
+
     }
 }

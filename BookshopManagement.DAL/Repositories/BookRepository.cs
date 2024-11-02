@@ -67,7 +67,8 @@ namespace BookshopManagement.DAL.Repositories
                 var existing = _context.Books.Find(book.Id);
                 if (existing != null)
                 {
-                    _context.Books.Remove(existing);
+                    existing.IsActive = false;
+                    _context.Books.Update(existing);
                     _context.SaveChanges();
 
                     LoggingService.Logger.LogInformation($"Book ID: {existing.Id} deleted successfully.");

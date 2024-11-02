@@ -69,7 +69,7 @@ namespace BookshopManagement.PL.ViewModel
             _bookService = bookService;
             _salesService = salesService;
 
-            AvailableBooks = new ObservableCollection<Book>(_bookService.GetAllBooks().Where(b => b.StockQuantity > 0));
+            AvailableBooks = new ObservableCollection<Book>(_bookService.GetAllBooks().Where(b => b.StockQuantity > 0 && b.IsActive));
             Cart = new ObservableCollection<CartItem>();
 
             // Subscribe to CollectionChanged to update CanSell state
@@ -162,7 +162,7 @@ namespace BookshopManagement.PL.ViewModel
             if (SelectedCartItem != null)
             {
                 // Find the corresponding book in AvailableBooks
-                var bookToUpdate = _bookService.GetAllBooks().FirstOrDefault(b => b.Id == SelectedCartItem.Book.Id);
+                var bookToUpdate = _bookService.GetAllBooks().Where(b => b.IsActive).FirstOrDefault(b => b.Id == SelectedCartItem.Book.Id);
 
                 if (bookToUpdate != null)
                 {

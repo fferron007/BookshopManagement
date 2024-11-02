@@ -108,7 +108,7 @@ namespace BookshopManagement.PL.ViewModel
         public BookManagementViewModel(IBookService bookService)
         {
             _bookService = bookService;
-            Books = new ObservableCollection<Book>(_bookService.GetAllBooks());
+            Books = new ObservableCollection<Book>(_bookService.GetAllBooks().Where(b => b.IsActive));
 
             SaveBookCommand = new RelayCommand(SaveBook);
             DeleteBookCommand = new RelayCommand(DeleteBook);
@@ -198,7 +198,7 @@ namespace BookshopManagement.PL.ViewModel
         private void RefreshBooksCollection()
         {
             Books.Clear();
-            foreach (var book in _bookService.GetAllBooks())
+            foreach (var book in _bookService.GetAllBooks().Where(b => b.IsActive))
             {
                 Books.Add(book);
             }
