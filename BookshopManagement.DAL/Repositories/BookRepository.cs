@@ -18,6 +18,8 @@ namespace BookshopManagement.DAL.Repositories
 
         public IEnumerable<Book> GetAll() => _context.Books.ToList();
 
+        public Book GetBookById(int bookId) => _context.Books.FirstOrDefault(b => b.Id == bookId);
+
         public void Add(Book book)
         {
             try

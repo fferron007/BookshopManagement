@@ -15,6 +15,8 @@ namespace BookshopManagement.BL.Services
 
         public IEnumerable<Book> GetAllBooks() => _bookRepository.GetAll();
 
+        public Book GetBookById(int bookId) => _bookRepository.GetBookById(bookId);
+
         public void AddBook(Book book) => _bookRepository.Add(book);
 
         public void UpdateBook(Book book) => _bookRepository.Update(book);
