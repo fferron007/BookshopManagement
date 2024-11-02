@@ -98,9 +98,10 @@ namespace BookshopManagement.PL.ViewModel
         }
 
         // Commands
-        public ICommand AddBookCommand { get; }
-        public ICommand EditBookCommand { get; }
+        public ICommand SaveBookCommand { get; }
         public ICommand DeleteBookCommand { get; }
+        public ICommand ClearFieldsCommand { get; } // New command for clearing fields
+
         #endregion
 
         #region Public Methods
@@ -109,9 +110,9 @@ namespace BookshopManagement.PL.ViewModel
             _bookService = bookService;
             Books = new ObservableCollection<Book>(_bookService.GetAllBooks());
 
-            AddBookCommand = new RelayCommand(AddBook);
-            EditBookCommand = new RelayCommand(EditBook);
+            SaveBookCommand = new RelayCommand(SaveBook);
             DeleteBookCommand = new RelayCommand(DeleteBook);
+            ClearFieldsCommand = new RelayCommand(ClearFields); // Initialize the ClearFields command
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -119,24 +120,30 @@ namespace BookshopManagement.PL.ViewModel
         #endregion
 
         #region Private Methods
-        private void AddBook()
+        private void SaveBook()
         {
             try
             {
-                var newBook = new Book { Title = Title, Author = Author, ISBN = ISBN, Price = Price, StockQuantity = StockQuantity };
-                _bookService.AddBook(newBook);
-                Books.Add(newBook);
+                if (SelectedBook == null)
+                {
+                    var newBook = new Book { Title = Title, Author = Author, ISBN = ISBN, Price = Price, StockQuantity = StockQuantity };
+                    _bookService.AddBook(newBook);
+                    Books.Add(newBook);
 
-                // Show success message
-                MessageBox.Show("Book added successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Show success message
+                    MessageBox.Show("Book added successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Clear input fields
-                ClearFields();
+                    // Clear input fields
+                    ClearFields();
+                } else
+                {
+                    EditBook();
+                }
             }
             catch (Exception ex)
             {
                 LoggingService.Logger.LogError(ex, "Error adding book.");
-                throw ex;
+                throw;
             }
         }
 
@@ -144,8 +151,6 @@ namespace BookshopManagement.PL.ViewModel
         {
             try
             {
-                if (SelectedBook == null) return;
-
                 // Update properties of the selected book
                 SelectedBook.Title = Title;
                 SelectedBook.Author = Author;
@@ -164,7 +169,7 @@ namespace BookshopManagement.PL.ViewModel
             catch (Exception ex)
             {
                 LoggingService.Logger.LogError(ex, "Error editing book.");
-                throw ex;
+                throw;
             }
         }
 
@@ -185,8 +190,8 @@ namespace BookshopManagement.PL.ViewModel
             }
             catch (Exception ex)
             {
-                LoggingService.Logger.LogError(ex, "Error deliting book.");
-                throw ex;
+                LoggingService.Logger.LogError(ex, "Error deleting book.");
+                throw;
             }
         }
 
@@ -213,8 +218,10 @@ namespace BookshopManagement.PL.ViewModel
         private void ClearFields()
         {
             Title = Author = ISBN = string.Empty;
-            Price = 0.0m; 
+            Price = 0.0m;
             StockQuantity = 0;
+
+            SelectedBook = null;
         }
         #endregion
     }

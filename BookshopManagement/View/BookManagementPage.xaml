@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:local="clr-namespace:BookshopManagement.PL.ViewModel"
       mc:Ignorable="d"
       Title="BookManagementPage" Height="450" Width="800">
     <Grid Margin="20">
@@ -62,8 +61,8 @@
 
         <!-- CRUD Buttons -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Add Book" Command="{Binding AddBookCommand}" Width="100" Margin="10"/>
-            <Button Content="Edit Book" Command="{Binding EditBookCommand}" Width="100" Margin="10"/>
+            <Button Content="Save" Command="{Binding SaveBookCommand}" Width="100" Margin="10"/>
+            <Button Content="Clear Fields" Command="{Binding ClearFieldsCommand}" Width="100" Margin="10"/>
             <Button Content="Delete Book" Command="{Binding DeleteBookCommand}" Width="100" Margin="10"/>
         </StackPanel>
     </Grid>
