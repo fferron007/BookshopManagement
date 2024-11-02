@@ -45,6 +45,7 @@ This solution is a Bookshop Management application built with .NET Core using WP
 
    - Open the **Package Manager Console** in Visual Studio (**Tools > NuGet Package Manager > Package Manager Console**).
    - Make sure **BookshopManagement.DAL** is selected as the default project in the console.
+   - Set **BookshopManagement.DAL** as startup project (right-click the project in Solution Explorer and select **Set as Startup Project**).
    - Run the following command to apply migrations and create the database:
 
      ```bash
