@@ -142,18 +142,19 @@ namespace BookshopManagement.PL.ViewModel
             }
         }
 
-        private void RefreshAvailableBooks()
+        public void RefreshAvailableBooks()
         {
-            var books = AvailableBooks.Where(b => b.StockQuantity > 0).ToList();
+            // Fetch updated list from the service, including only active books with stock
+            var books = _bookService.GetAllBooks()
+                                    .Where(b => b.StockQuantity > 0 && b.IsActive)
+                                    .ToList();
 
             AvailableBooks.Clear();
-
             foreach (var book in books)
             {
                 AvailableBooks.Add(book);
             }
         }
-
 
         private bool CanRemoveFromCart() => SelectedCartItem != null;
 

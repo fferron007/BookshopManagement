@@ -13,13 +13,13 @@ namespace BookshopManagement.PL.ViewModel
 {
     public class SalesReportViewModel : INotifyPropertyChanged
     {
+        #region Properties
         private DateTime? _startDate;
         private DateTime? _endDate;
         public ObservableCollection<Sale> SalesReport { get; set; }
         private readonly ISalesService _salesService;
         private readonly IConfiguration _configuration;
         private readonly string _reportDirectoryPath;
-
 
         public DateTime? StartDate
         {
@@ -43,7 +43,9 @@ namespace BookshopManagement.PL.ViewModel
 
         public ICommand GenerateReportCommand { get; }
         public ICommand ExportToCsvCommand { get; }
+        #endregion
 
+        #region Public Method
         public SalesReportViewModel(ISalesService salesService, IConfiguration configuration)
         {
             _salesService = salesService;
@@ -59,6 +61,12 @@ namespace BookshopManagement.PL.ViewModel
             EnsureReportDirectoryExists();
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion
+
+        #region Private Method
         private void EnsureReportDirectoryExists()
         {
             // Check if directory exists and create if not
@@ -116,9 +124,6 @@ namespace BookshopManagement.PL.ViewModel
         {
             return _salesService.GetSalesByDateRange(startDate, endDate);
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        #endregion
     }
 }
