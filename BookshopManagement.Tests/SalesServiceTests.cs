@@ -34,7 +34,7 @@ namespace BookshopManagement.Tests
             var cartItems = new List<CartItemDTO>
             {
                 new CartItemDTO { BookId = 1, Quantity = 2, TotalPrice = 20.0m },
-                new CartItemDTO { BookId = 1, Quantity = 3, TotalPrice = 30.0m }
+                new CartItemDTO { BookId = 2, Quantity = 3, TotalPrice = 30.0m }
             };
 
             // Act

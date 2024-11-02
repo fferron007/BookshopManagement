@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 
 namespace BookshopManagement.DAL
@@ -10,16 +11,19 @@ namespace BookshopManagement.DAL
     {
         public BookshopContext CreateDbContext(string[] args)
         {
-            // Build configuration from appsettings.json
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
+            // Set the path manually
+            var basePath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "BookshopManagement.DAL");
 
-            // Retrieve the connection string
+            // Load configuration from appsettings.json
+            var configuration = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory)  // Startup project directory
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+
+            // Get connection string from appsettings.json
             var connectionString = configuration.GetConnectionString("BookshopDatabase");
 
-            // Configure DbContextOptionsBuilder with the connection string
+            // Set up DbContext options
             var optionsBuilder = new DbContextOptionsBuilder<BookshopContext>();
             optionsBuilder.UseSqlServer(connectionString);
 

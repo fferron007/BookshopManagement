@@ -24,6 +24,7 @@ namespace BookshopManagement.DAL.Repositories
         {
             try
             {
+                book.IsActive = true;
                 _context.Books.Add(book);
                 _context.SaveChanges();
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookshopManagement.DAL.Migrations
 {
     [DbContext(typeof(BookshopContext))]
-    [Migration("20241030182733_InitialCreate")]
+    [Migration("20241102033504_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -35,11 +35,16 @@ namespace BookshopManagement.DAL.Migrations
 
                     b.Property<string>("Author")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ISBN")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -49,7 +54,8 @@ namespace BookshopManagement.DAL.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -8,11 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="BookshopContextFactory.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="..\BookshopManagement\appsettings.json" Link="appsettings.json" />
+    <Content Include="..\BookshopManagement\appsettings.json" Link="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 <ItemGroup>
