@@ -13,7 +13,7 @@ This solution is a Bookshop Management application built with .NET Core using WP
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/bookshop-management.git
+   git clone https://github.com/fferron007/BookshopManagement.git
    cd bookshop-management
    ```
 
